@@ -12,25 +12,27 @@ class Database:
         return cls._instance
     
     def _initialize(self):
+        print("🟢 Inicializando Database...")
+        
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
         
-        # DEBUG: Imprimir para ver si llegan las variables
-        print("=" * 50)
-        print("🔍 DEBUG - Conexión a Supabase")
-        print(f"SUPABASE_URL existe: {bool(url)}")
-        print(f"SUPABASE_KEY existe: {bool(key)}")
-        print(f"SUPABASE_URL valor: {url[:50] if url else 'NO EXISTE'}...")
-        print("=" * 50)
+        print(f"SUPABASE_URL: {'✅' if url else '❌ NO'}")
+        print(f"SUPABASE_KEY: {'✅' if key else '❌ NO'}")
         
         if not url or not key:
-            raise Exception("❌ Faltan variables de entorno SUPABASE_URL o SUPABASE_KEY")
+            error_msg = "Faltan variables de entorno: "
+            if not url:
+                error_msg += "SUPABASE_URL "
+            if not key:
+                error_msg += "SUPABASE_KEY"
+            raise Exception(error_msg)
         
         try:
             self.supabase = create_client(url, key)
-            print("✅ Supabase conectado exitosamente")
+            print("✅ Conexión a Supabase exitosa")
         except Exception as e:
-            print(f"❌ Error al conectar a Supabase: {e}")
+            print(f"❌ Error de conexión: {e}")
             raise
     
     def get_cursor(self):
