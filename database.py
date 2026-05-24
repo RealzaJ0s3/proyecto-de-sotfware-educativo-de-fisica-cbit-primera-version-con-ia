@@ -14,6 +14,14 @@ class Database:
     def _initialize(self):
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
+        
+        # Debug: Imprimir si están configuradas
+        print(f"SUPABASE_URL configurada: {bool(url)}")
+        print(f"SUPABASE_KEY configurada: {bool(key)}")
+        
+        if not url or not key:
+            raise Exception("Faltan variables de entorno SUPABASE_URL o SUPABASE_KEY")
+        
         self.supabase = create_client(url, key)
         print("✅ Supabase conectado")
     
