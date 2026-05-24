@@ -129,15 +129,22 @@ def login():
 
 @app.route('/api/temas', methods=['GET'])
 def obtener_temas():
+    print("🔵 Llamada a /api/temas")
     db = get_db()
+    print(f"db obtenida: {db}")
+    print(f"supabase: {db.supabase if db else 'NO DB'}")
+    
     if not db:
+        print("❌ db es None")
         return jsonify({'success': False, 'message': 'Error de conexion'}), 500
     
     try:
+        print("🔄 Consultando tabla 'temas'...")
         response = db.supabase.table('temas').select('*').order('orden').execute()
+        print(f"✅ Respuesta: {len(response.data)} temas encontrados")
         return jsonify({'success': True, 'temas': response.data})
     except Exception as e:
-        print(f"ERROR TEMAS: {e}")
+        print(f"❌ ERROR EN TEMAS: {e}")
         traceback.print_exc()
         return jsonify({'success': False, 'message': str(e)}), 500
 
