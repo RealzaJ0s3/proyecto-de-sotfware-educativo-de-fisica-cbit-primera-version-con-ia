@@ -138,6 +138,7 @@ def obtener_temas():
         return jsonify({'success': True, 'temas': response.data})
     except Exception as e:
         print(f"ERROR TEMAS: {e}")
+        traceback.print_exc()
         return jsonify({'success': False, 'message': str(e)}), 500
 
 
@@ -423,12 +424,10 @@ def progreso_general():
 # API - CHATBOT CON GROQ
 # ============================================
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
 
 @app.route('/api/chat', methods=['POST', 'OPTIONS'])
 def chat_con_groq():
-    print("🔵 ¡El endpoint /api/chat fue llamado!")
-    
     if request.method == 'OPTIONS':
         return '', 200
     
@@ -439,6 +438,9 @@ def chat_con_groq():
         
         if not mensaje:
             return jsonify({'success': False, 'message': 'Mensaje vacío'}), 400
+        
+        if not GROQ_API_KEY:
+            return jsonify({'success': False, 'message': 'API Key de Groq no configurada'}), 500
         
         prompt = f"""Eres un tutor de física para estudiantes de secundaria.
         
@@ -486,4 +488,4 @@ Responde en español, de manera clara, educativa y amigable. Sé conciso pero co
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)
