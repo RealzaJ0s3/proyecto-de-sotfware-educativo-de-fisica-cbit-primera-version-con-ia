@@ -15,15 +15,23 @@ class Database:
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
         
-        # Debug: Imprimir si están configuradas
-        print(f"SUPABASE_URL configurada: {bool(url)}")
-        print(f"SUPABASE_KEY configurada: {bool(key)}")
+        # DEBUG: Imprimir para ver si llegan las variables
+        print("=" * 50)
+        print("🔍 DEBUG - Conexión a Supabase")
+        print(f"SUPABASE_URL existe: {bool(url)}")
+        print(f"SUPABASE_KEY existe: {bool(key)}")
+        print(f"SUPABASE_URL valor: {url[:50] if url else 'NO EXISTE'}...")
+        print("=" * 50)
         
         if not url or not key:
-            raise Exception("Faltan variables de entorno SUPABASE_URL o SUPABASE_KEY")
+            raise Exception("❌ Faltan variables de entorno SUPABASE_URL o SUPABASE_KEY")
         
-        self.supabase = create_client(url, key)
-        print("✅ Supabase conectado")
+        try:
+            self.supabase = create_client(url, key)
+            print("✅ Supabase conectado exitosamente")
+        except Exception as e:
+            print(f"❌ Error al conectar a Supabase: {e}")
+            raise
     
     def get_cursor(self):
         return None
