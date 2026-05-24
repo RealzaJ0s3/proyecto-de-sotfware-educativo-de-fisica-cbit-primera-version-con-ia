@@ -47,9 +47,26 @@ def serve_html(filename):
 # ============================================
 
 def get_db():
+    print("🟡 Llamando a get_db()")
+    print(f"Database importado: {Database}")
+    
     if Database:
-        return Database()
-    return None
+        try:
+            db = Database()
+            print(f"🟡 db creada: {db}")
+            if db and db.supabase:
+                print(f"🟡 supabase existe: {bool(db.supabase)}")
+            else:
+                print("🟡 db.supabase es None")
+            return db
+        except Exception as e:
+            print(f"❌ Error al crear Database: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    else:
+        print("❌ Database es None - no se pudo importar")
+        return None
 
 
 # ============================================
