@@ -12,6 +12,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from database import Database
+    try:
+    from database import Database
+    print("✅ Database importado correctamente")
+except ImportError as e:
+    print(f"❌ Error importando Database: {e}")
+    Database = None
 except ImportError:
     Database = None
 
